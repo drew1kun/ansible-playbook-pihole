@@ -25,7 +25,7 @@ Playbook Variables
 | Variable | Description | Default |
 |----------|-------------|---------|
 | **vault_pitft_pi_passwd** | The encrypted pi user password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [`drew-kun.pitft/default/main.yaml`][pitft-pi-passwd-link] for reference |
-| **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see `vars/vault.yml` |
+| **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see [`drew-kun.pihole/default/main.yaml`][pihole-web-passwd-link] |
 
 Dependencies
 ------------
@@ -103,5 +103,7 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [pitft-galaxy-link]: https://galaxy.ansible.com/drew-kun/pitft/
 [pitft-adafruit-link]: https://www.adafruit.com/product/2423
 [pitft-pi-passwd-link]: https://github.com/drew-kun/ansible-pitft/blob/master/defaults/main.yml#L24
+[pihole-web-passwd-link]: https://github.com/drew-kun/ansible-pihole/blob/master/defaults/main.yml#L17
+
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-macos_setup/master/LICENSE
