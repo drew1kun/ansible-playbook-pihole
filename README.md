@@ -96,7 +96,7 @@ Author Information
 Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 
 [pihole-link]: https://pi-hole.net
-
+[ansible-vault-link]: https://docs.ansible.com/ansible/latest/user_guide/vault.html
 [bootstrap_core-galaxy-link]: https://galaxy.ansible.com/drew-kun/bootstrap_core/
 [pihole-galaxy-link]: https://galaxy.ansible.com/drew-kun/pihole/
 [dnscrypt-galaxy-link]: https://galaxy.ansible.com/drew-kun/dnscrypt/
