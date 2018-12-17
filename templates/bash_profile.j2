@@ -1,0 +1,5 @@
+{% if pihole_docker is defined and pihole_docker %}
+docker exec -it pihole pihole -c
+{% else %}
+pihole -c
+{% endif %}

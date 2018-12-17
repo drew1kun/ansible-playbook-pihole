@@ -1,0 +1,112 @@
+---
+# BOOTSTRAP_CORE PLAY:
+- name: 'Running bootstrap-core play as root user'
+  hosts: raspberrypi_3
+  remote_user: root
+
+  vars_files:
+  - vars/vault.yml
+
+  vars_prompt:
+  - name: pihole_playbook_prompt_user0_passwd
+    prompt: "password for user0 ('{{ vault_bootstrap_core_users[0].username }}') to be set in 'bootstrap_core' play"
+    private: yes
+    encrypt: "sha512_crypt"
+    confirm: yes
+    salt_size: 16
+  - name: pihole_playbook_nonroot_user_passwd
+    prompt: "password for non-root user to run the 'pihole' play as '{{ vault_bootstrap_core_users[0].username }}'"
+    private: yes
+    confirm: yes
+
+  roles:
+  - role: drew-kun.bootstrap_core
+    bootstrap_core_new_root_passwd: "{{ vault_bootstrap_core_new_root_passwd }}"
+    bootstrap_core_users:
+    - username: "{{ vault_bootstrap_core_users[0].username }}"
+      passwd: "{{ pihole_playbook_prompt_user0_passwd }}"
+      #passwd: "{{ vault_bootstrap_core_user0_passwd }}"
+      groups:
+      - "{{ bootstrap_core_su_group }}"
+    bootstrap_core__rpi3_network_wifi_APs: "{{ vault_bootstrap_core__rpi3_network_wifi_APs }}"
+
+  tasks:
+  - name: "Set password for {{ vault_bootstrap_core_users[0].username }} user in order to run the second play with it"
+    set_fact:
+      ansible_ssh_pass: "{{ pihole_playbook_nonroot_user_passwd }}"
+
+
+# PIHOLE PLAY:
+- name: "Running pihole play as non-root user - '{{ vault_bootstrap_core_users[0].username }}'"
+  hosts: raspberrypi_3
+  remote_user: "{{ vault_bootstrap_core_users[0].username }}"
+
+  vars_files:
+  - vars/vault.yml
+
+  vars:
+  # if specified as role option, then the tasks section will not respect this var.
+  - pihole_docker: no
+
+  roles:
+  - role: drew-kun.pihole  # look above - the pihole_docker var is specified playbook-wide
+    pihole_force_upgrade: no
+    pihole_setupVars_conf_WEBPASSWD: "{{ vault_pihole_setupVars_conf_WEBPASSWD }}"
+
+  - role: drew-kun.dnscrypt
+    dnscrypt_on_pihole: yes
+    dnscrypt_port: 41  # port 53 will be used by dnsmasq/pihole-FTL
+    when: not pihole_docker
+
+  tasks:
+  - name: '[pihole_playbook] Initiate dnscrypt-proxy systemd socket by pinging google.com'
+    shell: 'dig +short google.com @localhost'
+    register: pihole_playbook_nameres
+    until: pihole_playbook_nameres.rc == 0
+    retries: 10
+    delay: 1
+    # mark changed only if dns resolution was not already working:
+    changed_when: pihole_playbook_nameres.attempts > 1
+    when: not pihole_docker
+
+  - name: '[pihole_playbook] Create user pi with login shell bash and add it to  sudo group'
+    user:
+      name: pi
+      password: "{{ vault_pitft_pi_passwd }}"
+      groups: sudo
+      append: yes
+      shell: /bin/bash
+    become: yes
+    tags:
+    - pihole_playbook
+
+  - name: '[pihole_playbook] Add user pi to docker group if installing pihole docker container'
+    user:
+      name: pi
+      groups: docker
+      append: yes
+    become: yes
+    when: pihole_docker
+    tags:
+    - pihole_playbook
+
+  - name: '[pihole_playbook] Create .bash_profile to run pihole chronometer script on pi user autologin'
+    template:
+      src: bash_profile.j2
+      dest: /home/pi/.bash_profile
+      owner: pi
+      group: pi
+      mode: 0644
+    become: yes
+    tags:
+    - pihole_playbook
+
+  # This role is not idempotent for now
+  - name: '[pihole_playbook] Include pitft role as a task after other preparation tasks'
+    include_role:
+      name: drew-kun.pitft
+    vars:
+      pitft_chronometer: yes
+      pitft_display_rotation: 1
+      pitft_pi_passwd: "{{ vault_pitft_pi_passwd }}"
+...
