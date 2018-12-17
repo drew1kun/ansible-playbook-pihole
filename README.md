@@ -24,8 +24,8 @@ Playbook Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| **vault_pitft_pi_passwd** | The encrypted pi user password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [drew-kun.pitft][pitft-galaxy-link] (`default/main.yml#L22`) for reference |
-| **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see [`vars/vault.yml`(vars/vault.yml#L35) |
+| **vault_pitft_pi_passwd** | The encrypted pi user password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [`drew-kun.pitft/default/main.yaml`](default/main.yml#L22) for reference |
+| **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see [`vars/vault.yml`](vars/vault.yml#L35) |
 
 Dependencies
 ------------
