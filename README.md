@@ -29,7 +29,7 @@ Playbook Variables
 | **vault_bootstrap_core__rpi3_network_wifi_APs** | The list of wifi networks to be configured on the system using the rpi3_network role | set your own in `vars/vault.yml`, please check [`drew-kun.rpi3_network/default/main.yaml`][net-aps-link] for reference |
 | **vault_pitft_pi_passwd** | The encrypted pi user password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [`drew-kun.pitft/default/main.yaml`][pitft-pi-passwd-link] for reference |
 | **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see [`drew-kun.pihole/default/main.yaml`][pihole-web-passwd-link] |
-=======
+
 
 Dependencies
 ------------
