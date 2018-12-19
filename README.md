@@ -24,8 +24,12 @@ Playbook Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
+| **vault_bootstrap_core_new_root_passwd** | The encrypted root password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [`drew-kun.bootstrap_core/default/main.yaml`][bc-root-passwd-link] for reference |
+| **vault_bootstrap_core_users** | The list of users to be created on the system using the bootstrap_core role | set your own in `vars/vault.yml`, please check [`drew-kun.bootstrap_core/default/main.yaml`][bc-users-passwd-link] for reference |
+| **vault_bootstrap_core__rpi3_network_wifi_APs** | The list of wifi networks to be configured on the system using the rpi3_network role | set your own in `vars/vault.yml`, please check [`drew-kun.rpi3_network/default/main.yaml`][net-aps-link] for reference |
 | **vault_pitft_pi_passwd** | The encrypted pi user password in the form of randomly salted SHA512 hash | set your own in `vars/vault.yml`, please check [`drew-kun.pitft/default/main.yaml`][pitft-pi-passwd-link] for reference |
 | **vault_pihole_setupVars_conf_WEBPASSWD** | Password for pihole web interface for quiet `pihole` installation | see [`drew-kun.pihole/default/main.yaml`][pihole-web-passwd-link] |
+=======
 
 Dependencies
 ------------
@@ -47,7 +51,7 @@ Playbook Usage Example
 
 **ATTENTION!**
 
-**vault_pihole_setupVars_conf_WEBPASSWD** var is set in *vars/vault.yml*,
+variables are set in **vars/vault.yml**,
 which is encrypted with [ansible-vault][ansible-vault-link].
 
 Therefore we have multiple options to run the play:
@@ -81,6 +85,10 @@ add the following to **ansible.cfg**:
     [defaults]
     vault_password_file = .vault.key
 
+Modify the **vars/vault.yml** as you wish using:
+
+    ansible-vault edit vars/vault.yml
+
 Then run play as follows:
 
     ansible-playbook --user user -k pihole_playbook.yml
@@ -104,6 +112,10 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [pitft-adafruit-link]: https://www.adafruit.com/product/2423
 [pitft-pi-passwd-link]: https://github.com/drew-kun/ansible-pitft/blob/master/defaults/main.yml#L24
 [pihole-web-passwd-link]: https://github.com/drew-kun/ansible-pihole/blob/master/defaults/main.yml#L17
+[bc-root-passwd-link]: https://github.com/drew-kun/ansible-bootstrap_core/blob/master/defaults/main.yml#L24
+[bc-users-passwd-link]: https://github.com/drew-kun/ansible-bootstrap_core/blob/master/defaults/main.yml#L29
+[net-aps-link]: https://github.com/drew-kun/ansible-rpi3_network/blob/master/defaults/main.yml#L20
+
 
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-macos_setup/master/LICENSE
