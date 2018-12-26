@@ -21,6 +21,8 @@
 
   roles:
   - role: drew-kun.bootstrap_core
+    bootstrap_core_timezone: "{{ vault_bootstrap_core_timezone }}"
+    bootstrap_core_hostname: "{{ vault_bootstrap_core_hostname }}"
     bootstrap_core_new_root_passwd: "{{ vault_bootstrap_core_new_root_passwd }}"
     bootstrap_core_users:
     - username: "{{ vault_bootstrap_core_users[0].username }}"
