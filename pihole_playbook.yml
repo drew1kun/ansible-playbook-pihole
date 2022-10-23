@@ -1,7 +1,9 @@
 ---
+# ansible-playbook macsetup_playbook.yml -K --extra-vars "target=pihole"
+
 # BOOTSTRAP_CORE PLAY:
 - name: 'Running bootstrap-core play as root user'
-  hosts: raspberrypi_3
+  hosts: "{{ target }}"
   remote_user: root
 
   vars_files:
@@ -51,6 +53,7 @@
   - pihole_docker: no
 
   roles:
+  # - role: drew-kun.resolv
   - role: drew-kun.pihole  # look above - the pihole_docker var is specified playbook-wide
     pihole_force_upgrade: no
     pihole_setupVars_conf_WEBPASSWD: "{{ vault_pihole_setupVars_conf_WEBPASSWD }}"
